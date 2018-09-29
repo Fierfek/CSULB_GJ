@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  rotationSpeed: 50
+  rotationSpeed: 5
   direction: {x: 0, y: 0}
   isRotating: 0
   rotationDirection: 0
