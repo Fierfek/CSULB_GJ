@@ -19,6 +19,8 @@ public class Character : MonoBehaviour
 	private int rotationDirection = 0;
 	[SerializeField]
 	private float rotationValue = 0f;
+	Vector3 rotation, current;
+	float percent = 0;
 
 	private GameObject objectToHold;
 	
@@ -30,6 +32,8 @@ public class Character : MonoBehaviour
 		isMoving = false;
 		direction = Vector2.zero;
 		rb = GetComponent<Rigidbody2D>();
+
+		rotation = current = Vector3.zero;
 	}
 	
 	// Update is called once per frame
@@ -117,8 +121,13 @@ public class Character : MonoBehaviour
 		//Check to see if they are pretty much zero but floating point comparison needs to be fixed
 		if (Math.Abs(rb.rotation - rotationValue) > 0.5)
 		{
-			//rb.MoveRotation(rb.rotation + rotationSpeed * Time.deltaTime * rotationDirection);
-			rb.angularVelocity = rotationSpeed * Time.deltaTime * rotationDirection;
+			current.Set(0, 0, rb.rotation);
+			rotation.Set(0, 0, rotationValue);
+
+			percent += (1f / 60f); 
+
+			current = Vector3.Slerp(current, rotation, percent);
+			rb.MoveRotation(current.z);
 		}
 		else
 		{
