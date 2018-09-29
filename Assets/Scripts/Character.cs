@@ -6,7 +6,6 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
 	public float speed;
-	public float rotationSpeed;
 	public Vector2 direction;
 	
 	private Rigidbody2D rb;
@@ -16,13 +15,12 @@ public class Character : MonoBehaviour
 	private bool isMoving;
 	
 	[SerializeField]
-	private int rotationDirection = 0;
-	[SerializeField]
 	private float rotationValue = 0f;
 	Vector3 rotation, current;
 	float percent = 0;
 
 	private GameObject objectToHold;
+	private float timerToPickUp = 0f;
 	
 	// Use this for initialization
 	private void Start()
@@ -39,48 +37,20 @@ public class Character : MonoBehaviour
 	// Update is called once per frame
 	private void Update()
 	{
-//		if(transform.rotation.z == 0)
-//			direction.Set(0,  transform.up.y);
-//		if(transform.rotation.z == 90)
-//			direction.Set(transform.position.left, 0);
-		direction.Set(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical"));
-		
-		if ((int)direction.x == 0 && (int)direction.y == 0 || !isMoving)
+		direction.Set(Input.GetAxisRaw("Vertical"),Input.GetAxisRaw("Vertical"));
+
+		if ((int) direction.x == 0 && (int) direction.y == 0 || !isMoving)
 		{
 			Rotate();
 			isXFirst = false;
 			isMoving = false;
 		}
-		else
-		{
-			if ((int)Math.Abs(direction.x) == 1 && (int)Math.Abs(direction.y) == 0)
-			{
-				isXFirst = true;
-			}
-			else if ((int)Math.Abs(direction.x) == 0 && (int)Math.Abs(direction.y) == 1)
-			{
-				isXFirst = false;
-			}
-			else if ((int)Math.Abs(direction.x) == 1 && (int)Math.Abs(direction.y) == 1)
-			{
-				if (isXFirst)
-				{
-					direction.y = 0;
-				}
-				else
-				{
-					direction.x = 0;
-				}
-			}
-		}
 
 		if (!isRotating)
 		{
 			isMoving = true;
-			rb.MovePosition(rb.position + (direction * speed * Time.deltaTime));
-		}
-		
-		
+			rb.MovePosition(rb.position + (direction * new Vector2(transform.up.x, transform.up.y) * speed * Time.deltaTime));
+		}		
 	}
 
 	/// <summary>
@@ -92,13 +62,11 @@ public class Character : MonoBehaviour
 		if (Input.GetKey(KeyCode.Q) && !isRotating)
 		{
 			isRotating = true;
-			rotationDirection = 1;
 			rotationValue += 90;
 		}
 		else if (Input.GetKey(KeyCode.E) && !isRotating)
 		{
 			isRotating = true;
-			rotationDirection = -1;
 			rotationValue -= 90;
 		}
 		
@@ -124,7 +92,7 @@ public class Character : MonoBehaviour
 			current.Set(0, 0, rb.rotation);
 			rotation.Set(0, 0, rotationValue);
 
-			percent += (1f / 60f); 
+			percent += (1f / 2400f); 
 
 			current = Vector3.Slerp(current, rotation, percent);
 			rb.MoveRotation(current.z);
@@ -138,14 +106,31 @@ public class Character : MonoBehaviour
 
 	private void PickUpItem(GameObject goHit)
 	{
-		if (Input.GetButtonDown("Fire1"))
+		if (objectToHold == null)
 		{
 			objectToHold = goHit;
+			foreach (Transform child in transform)
+			{
+				objectToHold.transform.position = child.transform.position;
+				objectToHold.transform.SetParent(child.transform);
+			}
+		}
+	}
+
+	private void OnTriggerEnter2D(Collider2D other)
+	{
+		if (other.CompareTag("Button"))
+		{
+			print("Button");
+			objectToHold.tag = "Button";
+			objectToHold.transform.parent = null;
+			objectToHold.transform.position = other.gameObject.transform.position;
 		}
 	}
 
 	private void OnTriggerStay2D(Collider2D other)
 	{
+		Debug.Log("hit");
 		if (other.CompareTag("PickUp"))
 		{
 			PickUpItem(other.gameObject);

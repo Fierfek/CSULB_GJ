@@ -9,9 +9,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: newtile
+  m_Name: dirtTwo
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: d77c277c40f024507943d159b6e405a3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e8864e0d3e0ff4e35986909fbed715b7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
@@ -32,4 +32,4 @@ MonoBehaviour:
     e33: 1
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 1
-  m_ColliderType: 0
+  m_ColliderType: 1
