@@ -122,7 +122,7 @@ public class Character : MonoBehaviour
 		if (other.CompareTag("Button"))
 		{
 			print("Button");
-			objectToHold.tag = "Button";
+			objectToHold.tag = "DroppedPickUp";
 			objectToHold.transform.parent = null;
 			objectToHold.transform.position = other.gameObject.transform.position;
 		}
