@@ -92,13 +92,15 @@ public class Character : MonoBehaviour
 			current.Set(0, 0, rb.rotation);
 			rotation.Set(0, 0, rotationValue);
 
-			percent += (1f / 2400f); 
+			percent += (1f / 240f); 
 
 			current = Vector3.Slerp(current, rotation, percent);
+			
 			rb.MoveRotation(current.z);
 		}
 		else
 		{
+			percent = 0;
 			rb.rotation = rotationValue;
 			isRotating = false;
 		}
