@@ -21,6 +21,8 @@ public class Character : MonoBehaviour
 
 	private GameObject objectToHold;
 	private float timerToPickUp = 0f;
+
+	Animator anim;
 	
 	// Use this for initialization
 	private void Start()
@@ -32,6 +34,10 @@ public class Character : MonoBehaviour
 		rb = GetComponent<Rigidbody2D>();
 
 		rotation = current = Vector3.zero;
+
+		anim = GetComponent<Animator>();
+
+		anim.Play("idle no box");
 	}
 	
 	// Update is called once per frame
@@ -49,6 +55,7 @@ public class Character : MonoBehaviour
 		if (!isRotating)
 		{
 			isMoving = true;
+
 			rb.MovePosition(rb.position + (direction * new Vector2(transform.up.x, transform.up.y) * speed * Time.deltaTime));
 		}		
 	}
